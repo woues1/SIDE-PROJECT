@@ -15,7 +15,7 @@ const adminSchema = new Schema({
         type: String,
         required: true,
     },
-    JWT: {
+    refreshToken: {
         type: String,
     },
 
