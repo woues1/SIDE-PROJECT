@@ -1,21 +1,119 @@
-const mongoose = require('mongoose')
+const Admin = require('../models/adminModel');
+const Token = require('../models/tokenModel')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-const Schema = mongoose.Schema
+const adminLogin = async (req, res) => {
+    const { username, password } = req.body;
 
-const adminSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-    },
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required' });
+    }
 
-}, {timestamps: true})
+    try {
 
-module.exports = mongoose.model('Admin', adminSchema);
+        const adminUser = await Admin.findOne({ username }).populate('refreshToken'); // Ensure the Admin model is imported
+        if (!adminUser) {
+            return res.status(404).json({ error: 'No such account' });
+        }
+
+        if (await bcrypt.compare(password, adminUser.password)) {
+
+            const payload = { username: adminUser.username, email: adminUser.email };
+            const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+            const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+
+            let tokenDoc = await Token.findOne({ adminId: adminUser._id });
+
+            if (tokenDoc) {
+                tokenDoc.token = refreshToken;
+                await tokenDoc.save();
+            } else {
+                tokenDoc = await Token.create({ token: refreshToken, adminId: adminUser._id });
+            }
+            
+            adminUser.refreshToken = tokenDoc._id;
+            await adminUser.save();
+
+            return res.status(200).json({ accessToken, refreshToken });
+        } else {
+            return res.status(403).json({ error: 'Wrong password' });
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+const refreshToken = async (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res.status(401).json({ error: 'Refresh token required' });
+    }
+
+    try {
+        jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+            if (err) {
+                return res.status(403).json({ error: 'Invalid refresh token' });
+            }
+
+            // Find the admin in the database
+            const admin = await Admin.findOne({ refreshToken: token });
+            if (!admin) {
+                return res.status(403).json({ error: 'Refresh token not recognized' });
+            }
+
+            const payload = { username: user.username, email: user.email };
+            const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+
+            // Return the new access token
+            res.status(200).json({ accessToken });
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// const adminSignup = async (req, res) => {
+//     const { username, email, password } = req.body;
+
+//     if (!username || !email || !password) {
+//       return res.status(400).json({ error: 'All fields are required' });
+//     }
+
+//     try {
+//       // Check if the email is already taken
+//       const existingAdmin = await Admin.findOne({ email });
+//       if (existingAdmin) {
+//         return res.status(409).json({ error: 'Email is already in use' });
+//       }
+
+//       // Hash the password before saving
+//       const hashedPassword = await bcrypt.hash(password, 10);
+
+//       // Create a new admin user
+//       const newAdmin = new Admin({
+//         username,
+//         email,
+//         password: hashedPassword,
+//       });
+
+//       // Save the admin user to the database
+//       await newAdmin.save();
+
+//       // Respond with success message
+//       res.status(201).json({ message: 'Admin account created successfully' });
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Internal server error' });
+//     }
+//   };
+
+module.exports = {
+    adminLogin,
+    refreshToken
+};

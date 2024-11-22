@@ -1,7 +1,8 @@
 require('dotenv').config()
 const connectDB = require('./config/db');
 const express = require('express')
-const cors = require('cors')
+const cors = require('cors');
+const adminRoutes = require('./routes/adminRoutes')
 
 const app = express()
 
@@ -10,7 +11,7 @@ connectDB();
 
 app.use(cors())
 app.use(express.json())
-
-app.use(customMiddleware.requestLogger);
-
+app.use('/api', adminRoutes)
 app.get('/', (req, res) => res.send('API Running!'));
+
+app.listen(3000);

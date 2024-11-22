@@ -3,22 +3,12 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const adminSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-    },
-    refreshToken: {
-        type: String,
-    },
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    email: { type: String, required: true },
+    refreshToken: { type: Schema.Types.ObjectId, ref: 'Token' } // Reference to Token
+}, { timestamps: true });
 
-}, {timestamps: true})
+
 
 module.exports = mongoose.model('Admin', adminSchema);
