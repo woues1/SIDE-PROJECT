@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import { useAuthContext } from './hooks/useAuthContext';
 import Home from './pages/Home';
 import Base from './outlets/Base';
+import Dashboard from './pages/dashboard';
 function App() {
   const { user } = useAuthContext()
   return (
@@ -13,7 +14,11 @@ function App() {
             <Route index element={<Home />} />
             {!user && (
               <Route path='/login' element={<Login />} />
+
             )}
+            {user && (
+              <Route path='/dashboard' element={<Dashboard />} />
+              )}
           </Route>
         </Routes>
       </BrowserRouter >
