@@ -3,7 +3,8 @@ import Login from './pages/Login';
 import { useAuthContext } from './hooks/useAuthContext';
 import Home from './pages/Home';
 import Base from './outlets/Base';
-import Dashboard from './pages/dashboard';
+import Dashboard from './pages/Dashboard';
+
 function App() {
   const { user } = useAuthContext()
   return (
