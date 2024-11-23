@@ -1,3 +1,4 @@
+import CreateProject from "../components/CreateProject";
 
 function Dashboard() {
     return (
@@ -24,8 +25,7 @@ function Dashboard() {
                         <p className="mt-2 text-3xl font-bold text-gray-800">123</p>
                     </div>
                 </div>
-
-                <div className="mt-8 bg-gray-300 rounded-lg shadow p-6">
+                <div className="mt-8 bg-gray-300 rounded-lg shadow p-6 mb-10">
                     <h2 className="text-lg font-semibold text-gray-700">Recent Activity</h2>
                     <ul className="mt-4 space-y-2">
                         <li className="flex justify-between">
@@ -42,6 +42,7 @@ function Dashboard() {
                         </li>
                     </ul>
                 </div>
+                <CreateProject />
             </div>
         </div>
     );
