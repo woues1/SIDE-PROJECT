@@ -65,8 +65,9 @@ export const AuthContextProvider = ({ children }: any) => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    localStorage.setItem('user', JSON.stringify({ Authorization: data.accessToken }));
+                    localStorage.setItem('user', JSON.stringify({ accessToken: data.newAccessToken }));
                     console.log('New access token received and stored.');
+                    window.location.reload()
                 } else {
                     console.log('Failed to refresh token. Logging out.');
                     dispatch({ type: 'LOGOUT' });
@@ -79,9 +80,6 @@ export const AuthContextProvider = ({ children }: any) => {
 
         validateAccessToken();
     }, []);
-
-
-    console.log('AuthContext state: ', state)
 
     return (
         <AuthContext.Provider value={{ ...state, dispatch }}>

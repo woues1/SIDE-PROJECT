@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Admin = require('../models/adminModel'); 
+const Admin = require('../models/adminModel');
 const Token = require('../models/tokenModel')
 
 const authenticate = (req, res, next) => {
@@ -21,10 +21,14 @@ const authenticate = (req, res, next) => {
 };
 
 const checkRefreshToken = async (req, res, next) => {
-    if (!req.authError) return next(); // Skip if no authentication error from the previous middleware
+
+    const isRefreshTokenRoute = req.originalUrl === '/api/token/validate/refresh';
+    if (!isRefreshTokenRoute) {
+        if (!req.authError) return next(); // Skip if no authentication error from the previous middleware
+    }
 
     const refreshToken = req.cookies.refreshToken;
-    
+
     if (!refreshToken) return res.status(401).json({ error: 'Refresh token required' });
 
     try {
@@ -46,7 +50,8 @@ const checkRefreshToken = async (req, res, next) => {
             const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 
             // Attach new token to the response header
-            res.setHeader('Authorization', `Bearer ${newAccessToken}`);
+            //res.setHeader('Authorization', `Bearer ${newAccessToken}`);
+            res.status(200).json({ newAccessToken })
             req.user = payload; // Set user info for downstream use
 
             next();
@@ -55,7 +60,7 @@ const checkRefreshToken = async (req, res, next) => {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
-};  
+};
 
 
 

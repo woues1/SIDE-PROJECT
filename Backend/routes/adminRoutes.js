@@ -21,7 +21,9 @@ router.post('/logout', (req, res) => {
 //checks for frontend
 router.post('/token/validate', authenticate)
 
-router.post('/token/validate/refresh', checkRefreshToken)
+router.post('/token/validate/refresh', checkRefreshToken, (req, res) => {
+    console.log('Success')
+})
 
 // router.post('/admin/signup', adminSignup)
 
