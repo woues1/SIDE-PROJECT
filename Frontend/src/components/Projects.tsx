@@ -30,10 +30,10 @@ function Projects() {
         {projects.map((project: Project, index: number) => (
           <div
             key={project._id}
-            className={`bg-white shadow-md rounded-lg p-4 hover:shadow-xl transition-shadow ${index === 0 ? 'md:col-start-2' : ''}`}
+            className={`bg-black shadow-md rounded-lg p-4 hover:shadow-xl transition-shadow ${index === 0 ? 'md:col-start-2' : ''}`}
           >
-            <h2 className="text-lg font-semibold mb-2 text-black">{project.name}</h2>
-            <p className="text-gray-600 mb-4">{project.description}</p>
+            <h2 className="text-lg font-semibold mb-2 text-white">{project.name}</h2>
+            <p className="text-gray-200 mb-4">{project.description}</p>
             <a
               href={project.link}
               target="_blank"
