@@ -1,13 +1,17 @@
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout } from "../hooks/useLogout";
 
 function Header() {
     const { user } = useAuthContext()
-
+    const { logout } = useLogout()
+    const handleClick = () => {
+        logout()
+    }
     return (
         <header className="bg-gray-800 text-white p-4">
             <div className="container mx-auto flex justify-between items-center">
 
-                <a href="/home" className="text-2xl font-bold hover:text-gray-300">
+                <a href="/" className="text-2xl font-bold hover:text-gray-300">
                     Logo
                 </a>
 
@@ -22,9 +26,9 @@ function Header() {
                         Contact
                     </a>
                     {user && (
-                        <a href="/dashboard">
+                        <><a href="/dashboard">
                             dashboard
-                        </a>
+                        </a><button onClick={handleClick}>Log out</button></>
                     )}
                 </nav>
             </div>

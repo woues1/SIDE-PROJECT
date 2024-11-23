@@ -13,6 +13,10 @@ router.get('/admin/dashboard', authenticate, checkRefreshToken, (req, res) => {
     res.json({ message: 'You have access to this route!', user: req.user });
 });
 
+router.post('/logout', (req, res) => {
+    res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'Strict' });
+    res.sendStatus(204)
+});
 
 //checks for frontend
 router.post('/token/validate', authenticate)
