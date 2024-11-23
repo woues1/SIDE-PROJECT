@@ -1,5 +1,6 @@
 const Admin = require('../models/adminModel');
-const Token = require('../models/tokenModel')
+const Token = require('../models/tokenModel');
+const Projects = require('../models/projectModel')
 const jwt = require('jsonwebtoken');
 
 const adminLogin = async (req, res) => {
@@ -39,6 +40,20 @@ const adminLogin = async (req, res) => {
     }
 };
 
+const createProject = async (req, res) => {
+    const { name, description, link } = req.body
+    if (!name || !description || !link) {
+        return res.status(400).json({ message: "All fields are required: name, description, link" });
+    }
+    try {
+        const newProject = await Projects.create({ name, description, link });
+        return res.status(201).json({ message: "Project created successfully", project: newProject });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Failed to create project", error: error.message });
+    }
+}
+
 
 
 // const adminSignup = async (req, res) => {
@@ -77,5 +92,6 @@ const adminLogin = async (req, res) => {
 //   };
 
 module.exports = {
-    adminLogin
+    adminLogin,
+    createProject
 };
