@@ -50,7 +50,7 @@ const CreateProject = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md bg-white">
+    <div className="max-w-md p-6 border border-gray-300 rounded-lg shadow-md bg-gray-300">
       <h1 className="text-2xl font-semibold text-center mb-6">Create a New Project</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
