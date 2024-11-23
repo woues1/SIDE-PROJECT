@@ -32,7 +32,7 @@ export const AuthContextProvider = ({ children }: any) => {
         
         const validateAccessToken = async () => {
             if (user?.accessToken) {
-                console.log('Validating token:', user?.accessToken);
+                console.log('Checking access token...')
                 try {
                     const response = await fetch('/api/token/validate', {
                         method: 'POST',
@@ -53,7 +53,7 @@ export const AuthContextProvider = ({ children }: any) => {
                 }
             }
 
-            console.log('Requesting a new access token...');
+            console.log('Checking refresh token...');
             try {
                 const response = await fetch('/api/token/validate/refresh', {
                     method: 'POST',
@@ -69,7 +69,7 @@ export const AuthContextProvider = ({ children }: any) => {
                     console.log('New access token received and stored.');
                     window.location.reload()
                 } else {
-                    console.log('Failed to refresh token. Logging out.');
+                    console.log('No refresh token detected. User is not logged in');
                     dispatch({ type: 'LOGOUT' });
                 }
             } catch (error) {
