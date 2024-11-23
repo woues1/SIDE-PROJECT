@@ -1,82 +1,45 @@
 const Admin = require('../models/adminModel');
 const Token = require('../models/tokenModel')
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const adminLogin = async (req, res) => {
-    const { username, password } = req.body;
-
-    if (!username) {
-        return res.status(400).json({ error: 'Username is required' });
-    }
-
+    const { email, password } = req.body;
     try {
 
-        const adminUser = await Admin.findOne({ username }).populate('refreshToken'); // Ensure the Admin model is imported
-        if (!adminUser) {
-            return res.status(404).json({ error: 'No such account' });
-        }
+        const adminUser = await Admin.login(email, password)
 
-        if (await bcrypt.compare(password, adminUser.password)) {
+        const payload = { email: adminUser.email, email: adminUser.email };
+        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+        const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 
-            const payload = { username: adminUser.username, email: adminUser.email };
-            const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-            const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+        let tokenDoc = await Token.findOne({ adminId: adminUser._id });
 
-            let tokenDoc = await Token.findOne({ adminId: adminUser._id });
-
-            if (tokenDoc) {
-                tokenDoc.token = refreshToken;
-                await tokenDoc.save();
-            } else {
-                tokenDoc = await Token.create({ token: refreshToken, adminId: adminUser._id });
-            }
-            
-            adminUser.refreshToken = tokenDoc._id;
-            await adminUser.save();
-
-            return res.status(200).json({ accessToken, refreshToken });
+        if (tokenDoc) {
+            tokenDoc.token = refreshToken;
+            await tokenDoc.save();
         } else {
-            return res.status(403).json({ error: 'Wrong password' });
+            tokenDoc = await Token.create({ token: refreshToken, adminId: adminUser._id });
         }
 
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-};
+        adminUser.refreshToken = tokenDoc._id;
+        await adminUser.save();
 
-
-const refreshToken = async (req, res) => {
-    const { token } = req.body;
-
-    if (!token) {
-        return res.status(401).json({ error: 'Refresh token required' });
-    }
-
-    try {
-        jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
-            if (err) {
-                return res.status(403).json({ error: 'Invalid refresh token' });
-            }
-
-            // Find the admin in the database
-            const admin = await Admin.findOne({ refreshToken: token });
-            if (!admin) {
-                return res.status(403).json({ error: 'Refresh token not recognized' });
-            }
-
-            const payload = { username: user.username, email: user.email };
-            const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-
-            // Return the new access token
-            res.status(200).json({ accessToken });
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,      // Cannot be accessed by JavaScript
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',  // CSRF protection, use 'Lax' if needed
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
         });
+        console.log("successfully logged in")
+        return res.status(200).json({ accessToken });
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(400).json({ error: error.message });
     }
 };
+
+
 
 // const adminSignup = async (req, res) => {
 //     const { username, email, password } = req.body;
@@ -114,6 +77,5 @@ const refreshToken = async (req, res) => {
 //   };
 
 module.exports = {
-    adminLogin,
-    refreshToken
+    adminLogin
 };

@@ -23,7 +23,7 @@ const authenticate = (req, res, next) => {
 const checkRefreshToken = async (req, res, next) => {
     if (!req.authError) return next(); // Skip if no authentication error from the previous middleware
 
-    const refreshToken = req.headers['refreshtoken'];
+    const refreshToken = req.cookies.refreshToken;
 
     console.log("refresh token: ", refreshToken)
     if (!refreshToken) return res.status(401).json({ error: 'Refresh token required' });

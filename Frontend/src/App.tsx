@@ -1,11 +1,20 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import { useAuthContext } from './hooks/useAuthContext';
 
 function App() {
-
+  const { user } = useAuthContext()
   return (
     <>
-      <p className='bg-red-500 mx-auto'>asdasdasbydas</p>
+      <BrowserRouter>
+        <Routes>
+          {!user && (
+            <Route path="/login" element={<Login />} />
+          )}
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
 export default App
