@@ -14,7 +14,7 @@ const authenticate = (req, res, next) => {
             req.authError = 'Invalid access token';
             return next();
         }
-
+        res.sendStatus(200)
         req.user = decodedToken; // Access token is valid
         next();
     });
@@ -24,8 +24,7 @@ const checkRefreshToken = async (req, res, next) => {
     if (!req.authError) return next(); // Skip if no authentication error from the previous middleware
 
     const refreshToken = req.cookies.refreshToken;
-
-    console.log("refresh token: ", refreshToken)
+    
     if (!refreshToken) return res.status(401).json({ error: 'Refresh token required' });
 
     try {

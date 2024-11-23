@@ -16,11 +16,10 @@ export const authReducer = (state: any, action: any) => {
 
 
 export const AuthContextProvider = ({ children }: any) => {
-    const [state, dispatch] = useReducer(authReducer, {
-        user: null
-    })
+    const [state, dispatch] = useReducer(authReducer, { user: null })
 
     useEffect(() => {
+
         const user = (() => {
             try {
                 const storedUser = localStorage.getItem('user');
@@ -30,24 +29,21 @@ export const AuthContextProvider = ({ children }: any) => {
                 return null;
             }
         })();
-    
-        const refreshToken = document.cookie
-            .split('; ')
-            .find((cookie) => cookie.startsWith('refreshToken='))
-            ?.split('=')[1];
-    
+        
         const validateAccessToken = async () => {
-            if (user?.token) {
+            if (user?.accessToken) {
+                console.log('Validating token:', user?.accessToken);
                 try {
                     const response = await fetch('/api/token/validate', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            Authorization: `Bearer ${user.token}`,
+                            Authorization: `Bearer ${user.accessToken}`,
                         },
                     });
                     if (response.ok) {
                         console.log('Access token is valid.');
+                        dispatch({ type: 'LOGIN', payload: user });
                         return;
                     } else {
                         console.log('Access token is invalid.');
@@ -56,36 +52,34 @@ export const AuthContextProvider = ({ children }: any) => {
                     console.error('Error validating access token:', error);
                 }
             }
-    
-            if (refreshToken) {
-                console.log('Requesting a new access token...');
-                try {
-                    const response = await fetch('/api/token/refresh', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ refreshToken }),
-                    });
-    
-                    if (response.ok) {
-                        const data = await response.json();
-                        localStorage.setItem('user', JSON.stringify({ token: data.accessToken }));
-                        console.log('New access token received and stored.');
-                    } else {
-                        console.log('Failed to refresh token. Logging out.');
-                    }
-                } catch (error) {
-                    console.error('Error refreshing token:', error);
+
+            console.log('Requesting a new access token...');
+            try {
+                const response = await fetch('/api/token/validate/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('user', JSON.stringify({ Authorization: data.accessToken }));
+                    console.log('New access token received and stored.');
+                } else {
+                    console.log('Failed to refresh token. Logging out.');
+                    dispatch({ type: 'LOGOUT' });
                 }
-            } else {
-                console.log('User is not logged in.');
+            } catch (error) {
+                console.error('Error refreshing token:', error);
             }
+
         };
-    
+
         validateAccessToken();
     }, []);
-    
+
 
     console.log('AuthContext state: ', state)
 

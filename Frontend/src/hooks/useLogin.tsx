@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 
 export const useLogin = () => {
-    const [error, setError] = useState<string>('')
+    const [error, setError] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { dispatch } = useAuthContext()
 
@@ -25,7 +25,7 @@ export const useLogin = () => {
         if (response.ok) {
             //only set item if server sends back jwt toke in json form
             //if server responds with cookies only remove localStorage.setItem('Authorization', JSON.stringify(json));
-            localStorage.setItem('Authorization', JSON.stringify(json));
+            localStorage.setItem('user', JSON.stringify(json));
             dispatch({ type: 'LOGIN', payload: json })
             setIsLoading(false)
         }
