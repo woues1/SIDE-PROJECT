@@ -15,7 +15,7 @@ function Header() {
                     Logo
                 </a>
 
-                <nav className="flex space-x-4">
+                <nav className="flex space-x-4 items-center">
                     <a href="#projects" className="hover:text-gray-300">
                         Projects
                     </a>
@@ -28,7 +28,7 @@ function Header() {
                     {user && (
                         <><a href="/dashboard">
                             dashboard
-                        </a><button onClick={handleClick}>Log out</button></>
+                        </a><button className="bg-black p-2 rounded-lg" onClick={handleClick}>Log out</button></>
                     )}
                 </nav>
             </div>
