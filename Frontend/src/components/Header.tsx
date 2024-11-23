@@ -16,7 +16,7 @@ function Header() {
                 </a>
 
                 <nav className="flex space-x-4">
-                    <a href="/#projects" className="hover:text-gray-300">
+                    <a href="#projects" className="hover:text-gray-300">
                         Projects
                     </a>
                     <a href="/#about" className="hover:text-gray-300">

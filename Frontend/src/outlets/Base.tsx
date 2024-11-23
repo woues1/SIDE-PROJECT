@@ -6,7 +6,7 @@ function Base() {
     return (
         <div className="flex flex-col min-h-screen min-w-[100vw]">
             <Header />
-            <main className="flex-1">
+            <main className="flex-1 bg-gray-900">
                 <Outlet />
             </main>
             <Footer />

@@ -13,13 +13,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Base />}>
             <Route index element={<Home />} />
-            {!user && (
-              <Route path='/login' element={<Login />} />
-
-            )}
-            {user && (
-              <Route path='/dashboard' element={<Dashboard />} />
-              )}
+            {!user && (<Route path='/login' element={<Login />} />)}
+            {user && (<Route path='/dashboard' element={<Dashboard />} />)}
           </Route>
         </Routes>
       </BrowserRouter >
