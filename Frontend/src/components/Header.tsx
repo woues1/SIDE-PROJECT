@@ -29,7 +29,7 @@ function Header() {
 
                 <nav className="md:flex space-x-4 md:items-center mt-10 md:mt-0">
                     <ul className={`md:flex md:items-center md:z-auto md:static absolute w-full md:w-auto left-0 bg-gray-800
-                                   md:py-0 py-4 pl-4 md:py-0 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500
+                                   md:py-0 py-4 pl-4 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500
                                    ${isMenuOpen ? 'top-[50px] opacity-100' : 'top-[-400px] opacity-0'}`}>
                         <li className="mx-4 my-4 md:my-0">
                             <a href="#projects" className="hover:text-gray-300">Projects</a>

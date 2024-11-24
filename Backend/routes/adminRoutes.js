@@ -8,16 +8,8 @@ const {
 
 const router = express.Router()
 
-
 //POST routes
-
 router.post('/login', adminLogin)
-
-
-router.post('/logout', (req, res) => {
-    res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'Strict' });
-    res.sendStatus(204)
-});
 
 //checks for frontend
 router.use(authenticate)
@@ -39,7 +31,10 @@ router.get('/dashboard', authenticate, checkRefreshToken, (req, res) => {
 
 // Delete routes
 
+//route.delete('/delete/project')
 
 // update routes
+
+//router.put('/edit/project')
 
 module.exports = router;
