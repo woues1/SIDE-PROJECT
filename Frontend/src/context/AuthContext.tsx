@@ -1,7 +1,7 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 
 
-export const AuthContext = createContext<{ user: any; dispatch: React.Dispatch<any> } | undefined>(undefined);
+export const AuthContext = createContext<{ user: any; dispatch: React.Dispatch<any>; loading: boolean} | undefined>(undefined);
 
 export const authReducer = (state: any, action: any) => {
     switch (action.type) {
@@ -17,6 +17,7 @@ export const authReducer = (state: any, action: any) => {
 
 export const AuthContextProvider = ({ children }: any) => {
     const [state, dispatch] = useReducer(authReducer, { user: null })
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
@@ -52,6 +53,8 @@ export const AuthContextProvider = ({ children }: any) => {
             } catch (error) {
                 console.error('Error validating token:', error);
                 dispatch({ type: 'LOGOUT' });
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -60,7 +63,7 @@ export const AuthContextProvider = ({ children }: any) => {
 
 
     return (
-        <AuthContext.Provider value={{ ...state, dispatch }}>
+        <AuthContext.Provider value={{ ...state, dispatch, loading }}>
             {children}
         </AuthContext.Provider>
     )

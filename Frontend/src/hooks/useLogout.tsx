@@ -10,8 +10,9 @@ export const useLogout = () => {
                 method: 'POST', 
                 credentials: 'include',
         })
+        
         if (response.ok) {
-            dispatch({ type: 'LOGOUT ' })
+            dispatch({ type: 'LOGOUT' })
             window.location.reload();
         } else {
             console.log('Error occured while logging out')

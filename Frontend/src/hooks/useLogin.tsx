@@ -22,7 +22,7 @@ export const useLogin = () => {
             setError(json.error)
         }
         if (response.ok) {
-            //only set item if server sends back jwt toke in json form
+            //only set item if server sends back json
             //if server responds with cookies only remove localStorage.setItem('Authorization', JSON.stringify(json));
             localStorage.setItem('user', JSON.stringify(json));
             dispatch({ type: 'LOGIN', payload: json })

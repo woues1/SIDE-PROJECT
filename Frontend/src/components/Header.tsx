@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
+import { Link } from "react-router-dom";
 
 function Header() {
     const { user } = useAuthContext()
@@ -44,7 +45,7 @@ function Header() {
                         {user && (
                             <>
                                 <li className="mx-4 my-4 md:my-0">
-                                    <a href="/dashboard">dashboard</a>
+                                    <Link to="/dashboard">dashboard</Link>
                                 </li>
                                 <li className="mx-4 my-4 md:my-0">
                                     <button className="bg-black p-2 rounded-lg" onClick={handleClick}>Log out</button>
