@@ -1,22 +1,29 @@
 import { createContext, useEffect, useReducer, useState } from "react";
 
+import {
+    AuthState,
+    AuthAction,
+    AuthContextValue,
+    AuthContextProviderProps,
+    User,
+} from '../../AuthTypes';
 
-export const AuthContext = createContext<{ user: any; dispatch: React.Dispatch<any>; loading: boolean} | undefined>(undefined);
+export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-export const authReducer = (state: any, action: any) => {
+export const authReducer = (state: AuthState, action: AuthAction): AuthState => {
     switch (action.type) {
         case 'LOGIN':
-            return { user: action.payload }
+            return {...state, user: action.payload }
         case 'LOGOUT':
-            return { user: null }
+            return {...state, user: null }
         default:
             return state
     }
 }
 
 
-export const AuthContextProvider = ({ children }: any) => {
-    const [state, dispatch] = useReducer(authReducer, { user: null })
+export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
+    const [state, dispatch] = useReducer(authReducer, { user: null, loading: true })
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -24,7 +31,7 @@ export const AuthContextProvider = ({ children }: any) => {
         const validateToken = async () => {
             try {
                 const storedUser = localStorage.getItem('user');
-                const user = storedUser ? JSON.parse(storedUser) : null;
+                const user: User | null = storedUser ? JSON.parse(storedUser) : null;
 
                 console.log('Validating token...');
                 const response = await fetch('/api/admin/token/validate', {
@@ -41,7 +48,8 @@ export const AuthContextProvider = ({ children }: any) => {
                     if (data.newAccessToken) {
                         console.log('New access token received and stored.');
                         localStorage.setItem('user', JSON.stringify({ accessToken: data.newAccessToken }));
-                        dispatch({ type: 'LOGIN', payload: { accessToken: data.newAccessToken } });
+                        const updatedUser = { accessToken: data.newAccessToken };
+                        dispatch({ type: 'LOGIN', payload: updatedUser });
                     } else {
                         console.log('Access token is valid.');
                         dispatch({ type: 'LOGIN', payload: user });
