@@ -8,7 +8,6 @@ const authenticate = (req, res, next) => {
 
     if (!accessToken) {
         req.authError = 'Access token missing';
-        console.log('Access token missing')
         return next(); // Pass control to the next middleware (e.g., `checkRefreshToken`)
     }
 
@@ -26,7 +25,6 @@ const checkRefreshToken = async (req, res, next) => {
     ;
     // If no auth error, skip this middleware
     if (!req.authError) return next();
-
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {

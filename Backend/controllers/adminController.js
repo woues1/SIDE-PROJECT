@@ -10,7 +10,7 @@ const adminLogin = async (req, res) => {
         const adminUser = await Admin.login(email, password)
 
         const payload = { email: adminUser.email, email: adminUser.email };
-        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
         const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 
         let tokenDoc = await Token.findOne({ adminId: adminUser._id });
