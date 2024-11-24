@@ -20,66 +20,44 @@ export const AuthContextProvider = ({ children }: any) => {
 
     useEffect(() => {
 
-        const user = (() => {
+        const validateToken = async () => {
             try {
                 const storedUser = localStorage.getItem('user');
-                return storedUser ? JSON.parse(storedUser) : null;
-            } catch (error) {
-                console.error('Error parsing user from localStorage:', error);
-                return null;
-            }
-        })();
-        
-        const validateAccessToken = async () => {
-            if (user?.accessToken) {
-                console.log('Checking access token...')
-                try {
-                    const response = await fetch('/api/token/validate', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${user.accessToken}`,
-                        },
-                    });
-                    if (response.ok) {
-                        console.log('Access token is valid.');
-                        dispatch({ type: 'LOGIN', payload: user });
-                        return;
-                    } else {
-                        console.log('Access token is invalid.');
-                    }
-                } catch (error) {
-                    console.error('Error validating access token:', error);
-                }
-            }
+                const user = storedUser ? JSON.parse(storedUser) : null;
 
-            console.log('Checking refresh token...');
-            try {
-                const response = await fetch('/api/token/validate/refresh', {
+                console.log('Validating token...');
+                const response = await fetch('/api/admin/token/validate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: user?.accessToken ? `Bearer ${user.accessToken}` : '',
                     },
-                    credentials: 'include',
+                    credentials: 'include', // Send cookies for refresh token check
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    localStorage.setItem('user', JSON.stringify({ accessToken: data.newAccessToken }));
-                    console.log('New access token received and stored.');
-                    window.location.reload()
+                    if (data.newAccessToken) {
+                        console.log('New access token received and stored.');
+                        localStorage.setItem('user', JSON.stringify({ accessToken: data.newAccessToken }));
+                        dispatch({ type: 'LOGIN', payload: { accessToken: data.newAccessToken } });
+                    } else {
+                        console.log('Access token is valid.');
+                        dispatch({ type: 'LOGIN', payload: user });
+                    }
                 } else {
-                    console.log('No refresh token detected. User is not logged in');
+                    console.log('Token validation failed. Logging out.');
                     dispatch({ type: 'LOGOUT' });
                 }
             } catch (error) {
-                console.error('Error refreshing token:', error);
+                console.error('Error validating token:', error);
+                dispatch({ type: 'LOGOUT' });
             }
-
         };
 
-        validateAccessToken();
+        validateToken();
     }, []);
+
 
     return (
         <AuthContext.Provider value={{ ...state, dispatch }}>

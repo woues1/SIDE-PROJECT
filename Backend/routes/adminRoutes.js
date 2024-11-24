@@ -10,9 +10,9 @@ const router = express.Router()
 
 
 //POST routes
-router.post('/admin/login', adminLogin)
 
-router. post('/admin/create/project', createProject)
+router.post('/login', adminLogin)
+
 
 router.post('/logout', (req, res) => {
     res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'Strict' });
@@ -20,17 +20,20 @@ router.post('/logout', (req, res) => {
 });
 
 //checks for frontend
-router.post('/token/validate', authenticate)
+router.use(authenticate)
+router.use(checkRefreshToken)
 
-router.post('/token/validate/refresh', checkRefreshToken, (req, res) => {
-    console.log('Success')
-})
+router.post('/token/validate', (req, res) => {
+    res.status(200).json({message: 'valid token'})
+});
 
-// router.post('/admin/signup', adminSignup)
+router.post('/create/project', createProject)
+
+// router.post('/admin/createAdmin', createAdmin)
 
 
-// GET routes
-router.get('/admin/dashboard', authenticate, checkRefreshToken, (req, res) => {
+// GET routes   
+router.get('/dashboard', authenticate, checkRefreshToken, (req, res) => {
     res.json({ message: 'You have access to this route!', user: req.user });
 });
 

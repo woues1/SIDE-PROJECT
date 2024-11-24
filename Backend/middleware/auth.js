@@ -6,34 +6,38 @@ const authenticate = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const accessToken = authHeader && authHeader.split(' ')[1];
 
-    if (!accessToken) return res.sendStatus(401);
+    if (!accessToken) {
+        req.authError = 'Access token missing';
+        console.log('Access token missing')
+        return next(); // Pass control to the next middleware (e.g., `checkRefreshToken`)
+    }
 
     jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decodedToken) => {
         if (err) {
-            // Attach an error marker for the next middleware
-            req.authError = 'Invalid access token';
-            return next();
+            req.authError = 'Invalid or expired access token';
+            return next(); // Pass control to the next middleware
         }
-        res.sendStatus(200)
-        req.user = decodedToken; // Access token is valid
-        next();
+        req.user = decodedToken; // Attach decoded token payload to the request
+        return next(); // Access token is valid, proceed to the next middleware or route
     });
 };
 
 const checkRefreshToken = async (req, res, next) => {
-
-    const isRefreshTokenRoute = req.originalUrl === '/api/token/validate/refresh';
-    if (!isRefreshTokenRoute) {
-        if (!req.authError) return next(); // Skip if no authentication error from the previous middleware
-    }
+    ;
+    // If no auth error, skip this middleware
+    if (!req.authError) return next();
 
     const refreshToken = req.cookies.refreshToken;
 
-    if (!refreshToken) return res.status(401).json({ error: 'Refresh token required' });
+    if (!refreshToken) {
+        return res.status(401).json({ error: 'Refresh token required' });
+    }
 
     try {
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decodedRefreshToken) => {
-            if (err) return res.status(403).json({ error: 'Invalid refresh token' });
+            if (err) {
+                return res.status(403).json({ error: 'Invalid refresh token' });
+            }
 
             const tokenDoc = await Token.findOne({ token: refreshToken });
             if (!tokenDoc) {
@@ -47,17 +51,15 @@ const checkRefreshToken = async (req, res, next) => {
 
             // Generate a new access token
             const payload = { username: admin.username, email: admin.email };
-            const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+            const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 
-            // Attach new token to the response header
-            //res.setHeader('Authorization', `Bearer ${newAccessToken}`);
-            res.status(200).json({ newAccessToken })
-            req.user = payload; // Set user info for downstream use
-
-            next();
+            // Respond with the new access token
+            res.status(200).json({ newAccessToken });
+            req.user = payload; // Attach user payload for downstream use
+            next(); // Continue to the next middleware or route
         });
     } catch (err) {
-        console.error(err);
+        console.error('Error verifying refresh token:', err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
