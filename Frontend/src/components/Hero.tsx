@@ -1,7 +1,7 @@
 
 function Hero() {
   return (
-    <div className="bg-gray-900 text-white min-h-screen flex flex-col justify-center items-center px-6 mt-32 pt-32 md:pt-0 md:mt-0">
+    <div className="bg-gray-900 text-white min-h-screen flex flex-col justify-center items-center px-6 md:pt-0 md:mt-0">
       <h1 className="text-4xl md:text-6xl font-bold mb-4">
         Hi, I'm <span className="text-blue-500">Toni</span>
       </h1>
