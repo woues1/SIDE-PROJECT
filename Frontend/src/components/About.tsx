@@ -1,7 +1,7 @@
 
 function About() {
     return (
-        <section className="py-24 bg-gray-900 text-white">
+        <section className="py-24 bg-gray-900 text-white min-h-screen">
             <div className="container mx-auto px-6 md:px-12">
 
                 <h2 className="text-4xl font-semibold text-center mb-8">About Me</h2>
@@ -29,6 +29,10 @@ function About() {
                                 <li className="flex items-center">
                                     <span className="text-gray-400 mr-2">✔</span>
                                     <span>Node.js</span>
+                                </li>
+                                <li className="flex items-center">
+                                    <span className="text-gray-400 mr-2">✔</span>
+                                    <span>Express</span>
                                 </li>
                                 <li className="flex items-center">
                                     <span className="text-gray-400 mr-2">✔</span>

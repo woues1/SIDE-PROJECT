@@ -26,13 +26,13 @@ function Projects() {
 
   return (
     <>
-      <section className="py-24 bg-gray-900 text-white">
+      <section className="py-24 bg-gray-900 text-white min-h-screen">
 
         <h2 className="text-3xl font-bold text-center mb-8">
           My Projects
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4 bg-gray-900 w-full mx-auto place-items-center min-h-screen">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4 bg-gray-900 w-full mx-auto place-items-center">
           {projects.map((project: Project, index: number) => (
             <div
               key={project._id}
