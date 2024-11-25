@@ -23,7 +23,6 @@ const authenticate = (req, res, next) => {
 };
 
 const checkRefreshToken = async (req, res, next) => {
-    ;
     // If no auth error, skip this middleware
     if (!req.authError) return next();
     const refreshToken = req.cookies.refreshToken;
