@@ -17,12 +17,12 @@ function Header() {
     }
 
     return (
-        <header className="bg-gray-800 text-white p-4 shadow-lg mb-auto md:mb-0">
+        <header className="p-4 shadow-lg mb-auto md:mb-0 fixed w-full bg-gray-800 text-white ">
             <div className="container flex justify-between md:items-center ml-4 lg:mx-auto">
 
-                <a href="/" className="text-2xl font-bold hover:text-gray-300">
+                <Link to="/" className="text-2xl font-bold hover:text-gray-300">
                     Logo
-                </a>
+                </Link>
 
                 <button className="md:hidden text-2xl ml-auto mr-4" onClick={menuToggle}>
                 {isMenuOpen ? <span>&#10005;</span> : <span>&#9776;</span>}

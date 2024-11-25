@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Base from './outlets/Base';
 import Dashboard from './pages/Dashboard';
 
+
 function App() {
   const { user, loading } = useAuthContext();
 
@@ -16,7 +17,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Base />}>
+          <Route path='/' element={<Base />}>
             <Route index element={<Home />} />
             <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
             <Route path='/dashboard' element={user ? <Dashboard /> : <Navigate to='/login' />} />

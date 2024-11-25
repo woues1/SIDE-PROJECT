@@ -16,7 +16,7 @@ router.use(authenticate)
 router.use(checkRefreshToken)
 
 router.post('/token/validate', (req, res) => {
-    res.status(200).json({message: 'valid token'})
+
 });
 
 router.post('/create/project', createProject)

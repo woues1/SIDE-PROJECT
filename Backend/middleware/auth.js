@@ -17,6 +17,7 @@ const authenticate = (req, res, next) => {
             return next(); // Pass control to the next middleware
         }
         req.user = decodedToken; // Attach decoded token payload to the request
+        res.status(200).json({message: 'Access token is valid'})
         return next(); // Access token is valid, proceed to the next middleware or route
     });
 };
