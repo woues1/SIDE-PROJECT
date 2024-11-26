@@ -2,7 +2,7 @@ import CreateProject from "../components/CreateProject";
 
 function Dashboard() {
     return (
-        <div className="min-h-screen bg-gray-900 p-6">
+        <div className="py-24 min-h-screen bg-gray-900 p-6">
             <header className="bg-gray-300 shadow py-4 px-6 mb-6">
                 <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
             </header>

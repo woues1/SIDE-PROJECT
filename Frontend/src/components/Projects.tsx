@@ -28,7 +28,7 @@ function Projects() {
     <>
       <section className="py-24 bg-gray-900 text-white min-h-screen">
 
-        <h2 className="text-3xl font-bold text-center mb-8">
+        <h2 className="text-4xl font-semibold text-center mb-8">
           My Projects
         </h2>
 

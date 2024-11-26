@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
-import { Link } from "react-router-dom";
-
+import { Link, animateScroll as scroll } from 'react-scroll';
+import {Link as Linkpage} from 'react-router-dom'
 function Header() {
     const { user } = useAuthContext()
     const { logout } = useLogout()
@@ -19,13 +19,11 @@ function Header() {
     return (
         <header className="p-4 shadow-lg mb-auto md:mb-0 fixed w-full bg-gray-800 text-white ">
             <div className="container flex justify-between md:items-center ml-4 lg:mx-auto">
-
-                <Link to="/" className="text-2xl font-bold hover:text-gray-300">
-                    Logo
+                <Link activeClass="active" to="hero" spy={true} smooth={true} duration={500} className="text-2xl font-bold hover:text-gray-300">
+                logo
                 </Link>
-
                 <button className="md:hidden text-2xl ml-auto mr-4" onClick={menuToggle}>
-                {isMenuOpen ? <span>&#10005;</span> : <span>&#9776;</span>}
+                    {isMenuOpen ? <span>&#10005;</span> : <span>&#9776;</span>}
                 </button>
 
                 <nav className="md:flex space-x-4 md:items-center mt-10 md:mt-0">
@@ -33,19 +31,19 @@ function Header() {
                                    md:py-0 py-4 pl-4 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500
                                    ${isMenuOpen ? 'top-[50px] opacity-100' : 'top-[-400px] opacity-0'}`}>
                         <li className="mx-4 my-4 md:my-0">
-                            <a href="#projects" className="hover:text-gray-300">Projects</a>
+                            <Link to="projects" spy={true} smooth={true} duration={500}>Projects</Link>
                         </li>
                         <li className="mx-4 my-4 md:my-0">
-                            <a href="/#about" className="hover:text-gray-300">About</a>
+                            <Link to="about" spy={true} smooth={true} duration={500}>About</Link>
                         </li>
                         <li className="mx-4 my-4 md:my-0">
-                            <a href="/#contact" className="hover:text-gray-300">Contact</a>
+                            <Link to="contact" spy={true} smooth={true} duration={500}>Contact</Link>
                         </li>
 
                         {user && (
                             <>
                                 <li className="mx-4 my-4 md:my-0">
-                                    <Link to="/dashboard">dashboard</Link>
+                                    <Linkpage to="/dashboard">dashboard</Linkpage>
                                 </li>
                                 <li className="mx-4 my-4 md:my-0">
                                     <button className="bg-black p-2 rounded-lg" onClick={handleClick}>Log out</button>
