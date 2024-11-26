@@ -1,4 +1,5 @@
 import { Link } from 'react-scroll';
+import SocialIcons from './SocialIcons';
 
 function Hero() {
 
@@ -20,7 +21,7 @@ function Hero() {
         >
           View My Work
         </Link>
-        <Link 
+        <Link
           spy={true}
           duration={500}
           smooth={true}
@@ -29,7 +30,9 @@ function Hero() {
         >
           Get in Touch
         </Link>
+
       </div>
+      <SocialIcons />
     </div>
   );
 }
