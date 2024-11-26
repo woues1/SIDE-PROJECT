@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useFetch } from "../hooks/useFetch";
 interface Project {
   _id: string;
   name: string;
@@ -7,22 +7,8 @@ interface Project {
   link: string;
 }
 function Projects() {
-  const [projects, setProjects] = useState([]);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch("/api/projects", {
-          method: 'GET'
-        });
-        const data = await response.json();
-        setProjects(data);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    };
-    fetchProjects();
-  }, []);
+  const url = "api/projects"
+  const { data, isPending, error } = useFetch(url);
 
   return (
     <>
@@ -31,9 +17,10 @@ function Projects() {
         <h2 className="text-4xl font-semibold text-center mb-8">
           My Projects
         </h2>
-
+        {isPending && <div className="text-center">loading...</div>}
+        {error && <div>{error}</div>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4 bg-gray-900 w-full mx-auto place-items-center">
-          {projects.map((project: Project, index: number) => (
+          {data && data.map((project: Project, index: number) => (
             <div
               key={project._id}
               className={`bg-black shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out ${index === 0 ? 'md:col-start-2' : ''

@@ -9,9 +9,6 @@ import Dashboard from './pages/Dashboard';
 function App() {
   const { user, loading } = useAuthContext();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
@@ -19,8 +16,8 @@ function App() {
         <Routes>
           <Route path='/' element={<Base />}>
             <Route index element={<Home />} />
-            <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
-            <Route path='/dashboard' element={user ? <Dashboard /> : <Navigate to='/login' />} />
+            {!loading && <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />}
+            {!loading && <Route path='/dashboard' element={user ? <Dashboard /> : <Navigate to='/login' />} />}
           </Route>
         </Routes>
       </BrowserRouter >
