@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { User } from '../../AuthTypes';
 
 const CreateProject = () => {
   const [name, setName] = useState('');
@@ -21,11 +22,15 @@ const CreateProject = () => {
     }
 
     try {
+      const storedUser = localStorage.getItem('user');
+      const user: User | null = storedUser ? JSON.parse(storedUser) : null;
+
       // Make the API call to create a project using fetch
       const response = await fetch('/api/admin/create/project', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: user?.accessToken ? `Bearer ${user.accessToken}` : '',
         },
         body: JSON.stringify({ name, description, link }),
       });

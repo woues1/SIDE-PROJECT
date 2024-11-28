@@ -14,13 +14,13 @@ const router = express.Router()
 router.post('/login', adminLogin)
 
 router.use(authenticate)
+router.use(checkRefreshToken)
 //checks for frontend
 
 router.post('/addskill', addSkill);
 
 router.post('/create/project', createProject)
 
-router.use(checkRefreshToken)
 router.post('/token/validate');
 
 // router.post('/admin/createAdmin', createAdmin)

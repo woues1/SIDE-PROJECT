@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { User } from '../../AuthTypes';
 
 const AddSkillForm = () => {
     const [skill, setSkill] = useState('');
@@ -15,12 +16,15 @@ const AddSkillForm = () => {
             setError('All fields must be filled');
             return;
         }
-
+        const storedUser = localStorage.getItem('user');
+        const user: User | null = storedUser ? JSON.parse(storedUser) : null;
+        
         try {
             const response = await fetch('/api/admin/addskill', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: user?.accessToken ? `Bearer ${user.accessToken}` : '',
                 },
                 body: JSON.stringify({ skill, level }),
             });
