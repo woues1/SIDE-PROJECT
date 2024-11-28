@@ -14,22 +14,15 @@ const router = express.Router()
 router.post('/login', adminLogin)
 
 router.use(authenticate)
-router.use(checkRefreshToken)
 //checks for frontend
-
 router.post('/addskill', addSkill);
-
 router.post('/create/project', createProject)
-
-router.post('/token/validate');
-
-// router.post('/admin/createAdmin', createAdmin)
-
-
 // GET routes   
 router.get('/dashboard', (req, res) => {
     res.json({ message: 'You have access to this route!', user: req.user });
 });
+
+// router.post('/admin/createAdmin', createAdmin)
 
 // Delete routes
 
@@ -38,5 +31,8 @@ router.get('/dashboard', (req, res) => {
 // update routes
 
 //router.put('/edit/project')
+
+router.post('/token/validate', checkRefreshToken);
+
 
 module.exports = router;
