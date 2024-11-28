@@ -1,3 +1,4 @@
+import SkillsDisplay from "./SkillsDisplay";
 
 function About() {
     return (
@@ -14,42 +15,13 @@ function About() {
                         <p className="text-lg leading-relaxed mb-4">
                             I specialize in JavaScript and React, and I love learning new technologies to improve my skills. My goal is to deliver high-quality code and improve user experiences through thoughtful design and development.
                         </p>
-
-                        <div className="mt-8">
-                            <h3 className="text-xl font-semibold">Skills</h3>
-                            <ul className="mt-4 space-y-2">
-                                <li className="flex items-center">
-                                    <span className="text-gray-400 mr-2">✔</span>
-                                    <span>JavaScript</span>
-                                </li>
-                                <li className="flex items-center">
-                                    <span className="text-gray-400 mr-2">✔</span>
-                                    <span>React</span>
-                                </li>
-                                <li className="flex items-center">
-                                    <span className="text-gray-400 mr-2">✔</span>
-                                    <span>Node.js</span>
-                                </li>
-                                <li className="flex items-center">
-                                    <span className="text-gray-400 mr-2">✔</span>
-                                    <span>Express</span>
-                                </li>
-                                <li className="flex items-center">
-                                    <span className="text-gray-400 mr-2">✔</span>
-                                    <span>HTML & CSS</span>
-                                </li>
-                                <li className="flex items-center">
-                                    <span className="text-gray-400 mr-2">✔</span>
-                                    <span>Tailwind CSS</span>
-                                </li>
-                            </ul>
-                        </div>
+                        <SkillsDisplay />
                     </div>
 
                     <div className="lg:w-1/2 flex justify-center">
                         <img
-                            src="https://via.placeholder.com/300"
-                            alt="Profile Picture"
+                            src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
+                            alt="Placeholder profile picture"
                             className="rounded-full w-48 h-48 object-cover shadow-lg"
                         />
                     </div>

@@ -1,5 +1,5 @@
 import CreateProject from "../components/CreateProject";
-
+import AddSkillForm from "../components/AddSkill";
 function Dashboard() {
     return (
         <div className="py-24 min-h-screen bg-gray-900 p-6">
@@ -43,6 +43,7 @@ function Dashboard() {
                     </ul>
                 </div>
                 <CreateProject />
+                <AddSkillForm />
             </div>
         </div>
     );

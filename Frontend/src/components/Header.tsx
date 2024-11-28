@@ -17,11 +17,8 @@ function Header() {
     }
 
     return (
-        <header className="p-4 shadow-lg mb-auto md:mb-0 fixed w-full bg-gray-800 text-white ">
+        <header className="p-4 shadow-lg mb-10 md:mb-0 fixed w-full bg-gray-800 text-white max-h-fit">
             <div className="container flex justify-between md:items-center ml-4 lg:mx-auto">
-                <Link activeClass="active" to="hero" spy={true} smooth={true} duration={500} className="text-2xl font-bold hover:text-gray-300">
-                    logo
-                </Link>
                 <button className="md:hidden text-2xl ml-auto mr-4" onClick={menuToggle}>
                     {isMenuOpen ? <span>&#10005;</span> : <span>&#9776;</span>}
                 </button>

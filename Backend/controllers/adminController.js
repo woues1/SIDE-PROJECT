@@ -1,6 +1,7 @@
 const Admin = require('../models/adminModel');
 const Token = require('../models/tokenModel');
-const Projects = require('../models/projectModel')
+const Projects = require('../models/projectModel');
+const Skills = require('../models/skillsModel')
 const jwt = require('jsonwebtoken');
 
 const adminLogin = async (req, res) => {
@@ -54,6 +55,23 @@ const createProject = async (req, res) => {
     }
 }
 
+const addSkill = async (req, res) => {
+    const { skill, level } = req.body;
+
+    if (!skill || !level) {
+        return res.status(400).json({ message: "All fields must be filled" });
+    }
+
+    try {
+        const addedSkill = await Skills.create({ skill, level });
+        return res.status(201).json({ message: "Skill added successfully", skill: addedSkill });
+    } catch (error) {
+
+        return res.status(400).json({ message: "Failed to add skill", error: error.message });
+    }
+};
+
+
 
 
 // const adminSignup = async (req, res) => {
@@ -93,5 +111,6 @@ const createProject = async (req, res) => {
 
 module.exports = {
     adminLogin,
-    createProject
+    createProject,
+    addSkill
 };

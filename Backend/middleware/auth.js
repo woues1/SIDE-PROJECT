@@ -5,7 +5,8 @@ const Token = require('../models/tokenModel')
 const authenticate = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const accessToken = authHeader && authHeader.split(' ')[1];
-
+    req.authError = null
+        
     if (!accessToken) {
         req.authError = 'Access token missing';
         return next(); // Pass control to the next middleware (e.g., `checkRefreshToken`)
@@ -17,7 +18,9 @@ const authenticate = (req, res, next) => {
             return next(); // Pass control to the next middleware
         }
         req.user = decodedToken; // Attach decoded token payload to the request
-        res.status(200).json({message: 'Access token is valid'})
+        if (req.originalUrl === '/api/admin/token/validate') {
+            return res.status(200).json({message: 'Access token is valid'})
+        }
         return next(); // Access token is valid, proceed to the next middleware or route
     });
 };
