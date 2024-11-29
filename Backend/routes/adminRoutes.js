@@ -14,6 +14,7 @@ const router = express.Router()
 router.post('/login', adminLogin)
 
 router.use(authenticate)
+router.use(checkRefreshToken)
 //checks for frontend
 router.post('/addskill', addSkill);
 router.post('/create/project', createProject)
@@ -32,7 +33,7 @@ router.get('/dashboard', (req, res) => {
 
 //router.put('/edit/project')
 
-router.post('/token/validate', checkRefreshToken);
+router.post('/token/validate');
 
 
 module.exports = router;

@@ -42,8 +42,11 @@ function Dashboard() {
                         </li>
                     </ul>
                 </div>
-                <CreateProject />
-                <AddSkillForm />
+                    <div className="flex-">
+                    <CreateProject />
+                    <AddSkillForm />
+                    </div>
+
             </div>
         </div>
     );

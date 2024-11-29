@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { User } from '../../AuthTypes';
+import { usePost } from '../hooks/usePost';
 
 const CreateProject = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [link, setLink] = useState('');
-  const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const { isLoading, error, setError, post } = usePost();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,37 +22,29 @@ const CreateProject = () => {
     }
 
     try {
-      const storedUser = localStorage.getItem('user');
-      const user: User | null = storedUser ? JSON.parse(storedUser) : null;
+      // Use the post method from the usePost hook
 
-      // Make the API call to create a project using fetch
-      const response = await fetch('/api/admin/create/project', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: user?.accessToken ? `Bearer ${user.accessToken}` : '',
-        },
-        body: JSON.stringify({ name, description, link }),
+      const data = await post('/api/admin/create/project', {
+        name,
+        description,
+        link,
       });
+      
+      if (data) {
+        // Set the success message
+        setMessage(data.message);
 
-      if (!response.ok) {
-        throw new Error('Failed to create project');
+        // Optionally, reset the form fields after successful creation
+        setName('');
+        setDescription('');
+        setLink('');
       }
-
-      const data = await response.json();
-
-      // Set the success message
-      setMessage(data.message);
-
-      // Optionally, reset the form fields after successful creation
-      setName('');
-      setDescription('');
-      setLink('');
     } catch (err: any) {
       // Set error message if request fails
       setError(err.message || 'Failed to create project');
     }
   };
+
 
   return (
     <div className="max-w-md p-6 border border-gray-300 rounded-lg shadow-md bg-gray-300">
@@ -92,12 +84,41 @@ const CreateProject = () => {
         </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
         {message && <p className="text-green-500 text-sm">{message}</p>}
+        
         <button
-          type="submit"
-          className="w-full py-2 mt-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          Create Project
-        </button>
+                    type="submit"
+                    className={`w-full py-2 mt-4 font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                        }`}
+                    disabled={isLoading} // Disable button when loading
+                >
+                    {isLoading ? (
+                        <div className="flex items-center justify-center">
+                            <svg
+                                className="animate-spin h-5 w-5 mr-2 text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                ></circle>
+                                <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v8H4z"
+                                ></path>
+                            </svg>
+                            Loading...
+                        </div>
+                    ) : (
+                        'Create project'
+                    )}
+                </button>
       </form>
     </div>
   );

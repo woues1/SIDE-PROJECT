@@ -42,18 +42,36 @@ const adminLogin = async (req, res) => {
 };
 
 const createProject = async (req, res) => {
-    const { name, description, link } = req.body
+    const { name, description, link } = req.body;
+
+    // Validate the required fields
     if (!name || !description || !link) {
         return res.status(400).json({ message: "All fields are required: name, description, link" });
     }
+
     try {
         const newProject = await Projects.create({ name, description, link });
-        return res.status(201).json({ message: "Project created successfully", project: newProject });
+
+        const response = {
+            message: "Project created successfully",
+            project: newProject
+        };
+
+        if (req.newAccessToken) {
+            response.newAccessToken = req.newAccessToken;
+        }
+
+        return res.status(201).json(response);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Failed to create project", error: error.message });
+        return res.status(500).json({
+            message: "Failed to create project",
+            error: error.message
+        });
     }
-}
+};
+
+
 
 const addSkill = async (req, res) => {
     const { skill, level } = req.body;
@@ -64,12 +82,22 @@ const addSkill = async (req, res) => {
 
     try {
         const addedSkill = await Skills.create({ skill, level });
-        return res.status(201).json({ message: "Skill added successfully", skill: addedSkill });
-    } catch (error) {
 
+        const response = {
+            message: "Skill added successfully",
+            skill: addedSkill
+        };
+
+        if (req.newAccessToken) {
+            response.newAccessToken = req.newAccessToken; // Include new access token if available
+        }
+
+        return res.status(201).json(response);
+    } catch (error) {
         return res.status(400).json({ message: "Failed to add skill", error: error.message });
     }
 };
+
 
 
 

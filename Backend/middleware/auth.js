@@ -26,45 +26,45 @@ const authenticate = (req, res, next) => {
 };
 
 const checkRefreshToken = async (req, res, next) => {
-    // If no auth error, skip this middleware
     if (!req.authError) return next();
-    const refreshToken = req.cookies.refreshToken;
 
-    if (!refreshToken) {
-        return res.status(401).json({ error: 'Refresh token required' });
-    }
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) return res.status(401).json({ error: 'Refresh token required' });
 
     try {
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decodedRefreshToken) => {
-            if (err) {
-                return res.status(403).json({ error: 'Invalid refresh token' });
-            }
+        // Verify the refresh token
+        let decodedRefreshToken;
+        try {
+            decodedRefreshToken = await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        } catch (err) {
+            return res.status(403).json({ error: 'Invalid refresh token' });
+        }
 
-            const tokenDoc = await Token.findOne({ token: refreshToken });
-            if (!tokenDoc) {
-                return res.status(403).json({ error: 'Refresh token not recognized' });
-            }
+        // Find the token document in the database
+        const tokenDoc = await Token.findOne({ token: refreshToken });
+        if (!tokenDoc) {
+            throw new Error('Refresh token not recognized');
+        }
 
-            const admin = await Admin.findById(tokenDoc.adminId);
-            if (!admin) {
-                return res.status(403).json({ error: 'Admin not found for this refresh token' });
-            }
+        // Find the admin associated with the refresh token
+        const admin = await Admin.findById(tokenDoc.adminId);
+        if (!admin) {
+            throw new Error('Admin not found for this refresh token');
+        }
 
-            // Generate a new access token
-            const payload = { username: admin.username, email: admin.email };
-            const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+        // Create a new access token and store it in the request
+        const payload = { username: admin.username, email: admin.email };
+        const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 
-            // Respond with the new access token
-            res.status(200).json({ newAccessToken });
-            req.user = payload; // Attach user payload for downstream use
-            next(); // Continue to the next middleware or route
-        });
+        req.newAccessToken = newAccessToken;  // Store new access token in the request object
+        req.user = payload;  // Attach user payload for downstream use
+
+        next();
     } catch (err) {
         console.error('Error verifying refresh token:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(403).json({ error: err.message });
     }
 };
-
 
 
 
