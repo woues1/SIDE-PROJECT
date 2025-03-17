@@ -1,8 +1,9 @@
 import SkillsDisplay from "./SkillsDisplay";
 
 function About() {
+
     return (
-        <section className="py-24 bg-gray-900 text-white min-h-screen">
+        <section className='py-24 min-h-screen bg-gray-100  text-gray-900 dark:bg-gray-900 dark:text-white' >
             <div className="container mx-auto px-6 md:px-12">
 
                 <h2 className="text-4xl font-semibold text-center mb-8">About Me</h2>

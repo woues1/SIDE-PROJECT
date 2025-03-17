@@ -12,18 +12,18 @@ function Projects() {
 
   return (
     <>
-      <section className="py-24 min-h-screen bg-gray-900 text-white">
+      <section className="py-24 min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
 
         <h2 className="text-4xl font-semibold text-center mb-8">
           My Projects
         </h2>
         {isPending && <div className="text-center">loading...</div>}
         {error && <div>{error}</div>}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 w-full mx-auto place-items-center bg-gray-900">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 w-full mx-auto place-items-center bg-gray-100 dark:bg-gray-900">
           {data && data.map((project: Project, index: number) => (
             <div
               key={project._id}
-              className={`shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out bg-black ${index === 0 ? 'md:col-start-2' : ''
+              className={`shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out bg-gray-300 dark:bg-black ${index === 0 ? 'md:col-start-2' : ''
                 }`}
             >
               <h3 className="text-xl font-semibold mb-2">{project.name}</h3>

@@ -1,5 +1,3 @@
-
-
 const SocialIcons: React.FC = () => {
     return (
         <div className='flex gap-[20px] pt-3'>
