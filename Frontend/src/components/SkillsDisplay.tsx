@@ -10,7 +10,7 @@ function SkillsDisplay() {
             <ul className="mt-4 space-y-4">
                 {isPending && <div>loading...</div>}
                 {!isPending && data && data.length > 0 ? (
-                    data.map(({ skill, level }:any) => (
+                    data.map(({ skill, level }: any) => (
                         <li key={skill}>
                             <div className="flex justify-between items-center">
                                 <span>{skill}</span>

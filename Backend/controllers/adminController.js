@@ -32,7 +32,6 @@ const adminLogin = async (req, res) => {
             sameSite: 'Strict',  // CSRF protection, use 'Lax' if needed
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
         });
-        console.log("successfully logged in")
         return res.status(200).json({ accessToken });
 
     } catch (error) {
