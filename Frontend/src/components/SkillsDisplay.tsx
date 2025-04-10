@@ -1,8 +1,7 @@
-import React from 'react'
 import { useFetch } from '../hooks/useFetch'
 
 function SkillsDisplay() {
-    const { data, isPending, error } = useFetch("/api/skills")
+    const { data, isPending } = useFetch("/api/skills")
 
     return (
         <div className="mt-8">
