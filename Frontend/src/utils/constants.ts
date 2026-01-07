@@ -112,11 +112,12 @@ export const SEO_DEFAULTS = {
 } as const;
 
 // Social media links (update with your actual links)
+// TODO: Replace with actual social media URLs or configure via environment variables
 export const SOCIAL_LINKS = {
-  GITHUB: 'https://github.com/yourusername',
-  LINKEDIN: 'https://linkedin.com/in/yourusername',
-  TWITTER: 'https://twitter.com/yourusername',
-  EMAIL: 'mailto:your.email@example.com',
+  GITHUB: import.meta.env.VITE_GITHUB_URL || 'https://github.com/yourusername',
+  LINKEDIN: import.meta.env.VITE_LINKEDIN_URL || 'https://linkedin.com/in/yourusername',
+  TWITTER: import.meta.env.VITE_TWITTER_URL || 'https://twitter.com/yourusername',
+  EMAIL: import.meta.env.VITE_EMAIL || 'mailto:your.email@example.com',
 } as const;
 
 // Accessibility

@@ -65,7 +65,25 @@ function Contact() {
 
     setIsSubmitting(true);
     
-    // Simulate form submission - Replace with actual API call
+    // TODO: Replace with actual API call to your backend
+    // Example:
+    // try {
+    //   const response = await fetch('/api/contact', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(formData),
+    //   });
+    //   if (!response.ok) throw new Error('Failed to send message');
+    //   setSubmitSuccess(true);
+    //   setFormData({ name: '', email: '', subject: '', message: '' });
+    // } catch (error) {
+    //   console.error('Form submission error:', error);
+    //   // Show error message to user
+    // } finally {
+    //   setIsSubmitting(false);
+    // }
+    
+    // Simulated form submission for demonstration
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
       setSubmitSuccess(true);
