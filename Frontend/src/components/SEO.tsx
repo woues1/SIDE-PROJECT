@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { SEO_DEFAULTS } from '../utils/constants';
 
 interface SEOProps {
   title?: string;
@@ -10,11 +11,11 @@ interface SEOProps {
 }
 
 function SEO({
-  title = 'Portfolio Project',
-  description = 'A modern portfolio showcasing projects, skills, and experience',
-  keywords = 'portfolio, web development, react, typescript',
-  author = 'Your Name',
-  ogImage = '/og-image.jpg',
+  title = SEO_DEFAULTS.TITLE,
+  description = SEO_DEFAULTS.DESCRIPTION,
+  keywords = SEO_DEFAULTS.KEYWORDS,
+  author = SEO_DEFAULTS.AUTHOR,
+  ogImage = SEO_DEFAULTS.OG_IMAGE,
   ogUrl = window.location.href,
 }: SEOProps) {
   return (
