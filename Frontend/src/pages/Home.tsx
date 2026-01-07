@@ -2,11 +2,16 @@ import About from "../components/About"
 import Contact from "../components/Contact"
 import Hero from "../components/Hero"
 import Projects from "../components/Projects"
+import SEO from "../components/SEO"
 
 function Home() {
   return (
     <>
-    
+      <SEO 
+        title="Portfolio - Home"
+        description="Welcome to my portfolio. Explore my projects, skills, and get in touch."
+        keywords="portfolio, projects, web development, react, typescript"
+      />
       <section id='hero'>
         <Hero />
       </section>
