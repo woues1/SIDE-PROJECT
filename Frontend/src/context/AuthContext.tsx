@@ -6,7 +6,7 @@ import {
     AuthContextValue,
     AuthContextProviderProps,
     User,
-} from '../../AuthTypes';
+} from '../types/AuthTypes';
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
